@@ -331,4 +331,27 @@ function uploadProfileImage(event) {
     // حفظ الصورة في LocalStorage
     localStorage.setItem('futuristic_dash_avatar', base64Image);
   };
+}// دالة تحديث الساعة والتاريخ
+function updateClockWidget() {
+  const timeElem = document.getElementById('clockTime');
+  const dateElem = document.getElementById('clockDate');
+  
+  if (!timeElem || !dateElem) return;
+
+  const now = new Date();
+  
+  // صيغة الوقت (ساعات : دقائق : ثواني)
+  const hours = String(now.getHours()).padStart(2, '0');
+  const minutes = String(now.getMinutes()).padStart(2, '0');
+  const seconds = String(now.getSeconds()).padStart(2, '0');
+  
+  timeElem.textContent = `${hours}:${minutes}:${seconds}`;
+
+  // صيغة التاريخ العربي
+  const options = { weekday: 'short', month: 'short', day: 'numeric' };
+  dateElem.textContent = now.toLocaleDateString('ar-EG', options);
 }
+
+// تشغيل الساعة فوراً وتحديثها كل ثانية
+setInterval(updateClockWidget, 1000);
+updateClockWidget();
