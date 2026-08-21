@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Futuristic Glass Dashboard</title>
+  
+  <!-- Font Awesome CDN -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800;900&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+  <!-- خلفيات الإضاءة النيون لإبراز الزجاج -->
+  <div class="glow-blob blob-1"></div>
+  <div class="glow-blob blob-2"></div>
+
+  <!-- شريط التحميل الاحترافي أعلى الصفحة -->
+  <div class="page-loader-bar" id="loaderBar"></div>
+
+  <!-- المحتوى الرئيسي -->
+<main class="main-content">
+  <!-- شريط البحث السحري (مستقل بدون هيدر علوي) -->
+  <div class="top-header" id="topHeader">
+    <div class="expand-search-wrapper" id="searchWrapper">
+      <div class="neon-search-box">
+        <i class="fa-solid fa-magnifying-glass search-icon-inside"></i>
+        <input type="text" id="searchInput" placeholder="ابحث عن أي موقع أو تقنية..." oninput="filterDashboard()">
+        <button class="close-search-btn" onclick="toggleSearch(false)">
+          <i class="fa-solid fa-xmark"></i>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <div class="dashboard-grid" id="gridContainer">
+    <!-- الأقسام بتنزل هنا -->
+  </div>
+</main>
+
+<!-- دائرة الصورة العائمة تحت على اليمين -->
+<!-- دائرة الصورة العائمة تحت على اليمين مع إمكانية رفع صورة -->
+<div class="bottom-profile-avatar" title="تغيير الصورة الشخصية" onclick="document.getElementById('profileInput').click()">
+  <img src="https://ui-avatars.com/api/?name=User&background=a855f7&color=fff&bold=true" alt="User Profile" id="profileImg">
+  <!-- input مخفي لاختيار الصورة -->
+  <input type="file" id="profileInput" accept="image/*" style="display: none;" onchange="uploadProfileImage(event)">
+</div>
+  <!-- Floating Navigation Bar الزجاجية السفلية -->
+  <div class="bottom-nav-container">
+    <nav class="bottom-nav">
+      <button class="nav-item active" title="الرئيسية" onclick="resetSearch()">
+        <i class="fa-solid fa-house"></i>
+      </button>
+      <button class="nav-item" id="searchToggleBtn" title="بحث">
+        <i class="fa-solid fa-magnifying-glass"></i>
+      </button>
+      <button class="nav-item" id="openSectionModal" title="إضافة سكشن">
+        <i class="fa-solid fa-plus"></i>
+      </button>
+      <button class="nav-item" id="openLinkModal" title="إضافة محتوى">
+        <i class="fa-solid fa-link"></i>
+      </button>
+      <button class="nav-item" id="themeBtn" title="المظهر">
+        <i class="fa-solid fa-moon"></i>
+      </button>
+    </nav>
+  </div>
+
+  <!-- Modal إضافة سكشن -->
+  <div class="modal-overlay" id="sectionModal">
+    <div class="modal glass-card">
+      <h3><i class="fa-solid fa-folder-plus"></i> إضافة سكشن جديد</h3>
+      <div class="form-group">
+        <label>عنوان السكشن</label>
+        <input type="text" id="secTitle" placeholder="مثال: مسار Front-End أو أدوات التصميم">
+      </div>
+      <div class="form-group">
+        <label>نوع السكشن</label>
+        <select id="secType">
+          <option value="normal">🌐 سكشن عادي (روابط ومواقع)</option>
+          <option value="learning">🎓 سكشن تعليمي (مسار / آكورديون)</option>
+        </select>
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-primary" id="saveSectionBtn">حفظ السكشن</button>
+        <button class="btn btn-secondary closeModal">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal إضافة محتوى -->
+  <div class="modal-overlay" id="linkModal">
+    <div class="modal glass-card">
+      <h3><i class="fa-solid fa-circle-plus"></i> إضافة محتوى للسكشن</h3>
+      <div class="form-group">
+        <label>اختر السكشن</label>
+        <select id="targetSecSelect"></select>
+      </div>
+
+      <div id="normalFields">
+        <div class="form-group">
+          <label>اسم الموقع/الرابط</label>
+          <input type="text" id="linkName" placeholder="مثال: Facebook">
+        </div>
+        <div class="form-group">
+          <label>رابط الموقع (URL)</label>
+          <input type="url" id="linkUrl" placeholder="https://example.com">
+        </div>
+      </div>
+
+      <div id="learningFields" class="hidden">
+        <div class="form-group">
+          <label>اسم التقنية/الموضوع</label>
+          <input type="text" id="topicName" placeholder="مثال: HTML5 أو JavaScript">
+        </div>
+        <div class="form-group">
+          <label>رابط الكورس</label>
+          <input type="url" id="topicCourse" placeholder="https://youtube.com/...">
+        </div>
+        <div class="form-group">
+          <label>ملاحظات ملخصة</label>
+          <textarea id="topicNotes" rows="3" placeholder="اكتب الملاحظات الهامة هنا..."></textarea>
+        </div>
+        <div class="form-group">
+          <label>رابط ملف الـ PDF / المراجع</label>
+          <input type="url" id="topicPdf" placeholder="https://drive.google.com/...">
+        </div>
+      </div>
+
+      <div class="form-group">
+        <label>أيقونة خاصة (رفع صورة من الجهاز - اختياري)</label>
+        <input type="file" id="iconFile" accept="image/*">
+      </div>
+
+      <div class="modal-actions">
+        <button class="btn btn-primary" id="saveLinkBtn">إضافة المحتوى</button>
+        <button class="btn btn-secondary closeModal">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pop-up تأكيد الحذف -->
+  <div class="modal-overlay" id="confirmModal">
+    <div class="modal glass-card modal-sm">
+      <h3><i class="fa-solid fa-triangle-exclamation"></i> تأكيد الحذف</h3>
+      <p id="confirmText">هل أنت متأكد من الحذف؟</p>
+      <div class="modal-actions">
+        <button class="btn btn-danger" id="confirmYesBtn">نعم، احذف</button>
+        <button class="btn btn-secondary closeModal">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <script src="script.js"></script>
+</body>
+</html>
