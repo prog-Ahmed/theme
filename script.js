@@ -40,12 +40,18 @@ let deleteAction = null;
 
 document.documentElement.setAttribute('data-theme', theme);
 
-// انيميشن التحميل عند الريلود
+// انيميشن التحميل عند الريلود واسترجاع الصورة المحفوظة
 window.addEventListener('DOMContentLoaded', () => {
   const loader = document.getElementById('loaderBar');
   if (loader) {
     loader.classList.add('active');
     setTimeout(() => loader.classList.remove('active'), 1400);
+  }
+
+  const savedAvatar = localStorage.getItem('futuristic_dash_avatar');
+  if (savedAvatar) {
+    const profileImg = document.getElementById('profileImg');
+    if (profileImg) profileImg.src = savedAvatar;
   }
 });
 
@@ -131,13 +137,58 @@ function render(filterQuery = '') {
 }
 
 // -----------------------------------------------------------
-// شريط البحث المطور (الانسيابي والتمدد من المنتصف)
+// الصوت وتأثير النجاح (Success Toast & Audio)
+// -----------------------------------------------------------
+function playSuccessSound() {
+  try {
+    const AudioContext = window.AudioContext || window.webkitAudioContext;
+    if (!AudioContext) return;
+    
+    const ctx = new AudioContext();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+
+    osc.type = 'sine';
+    const now = ctx.currentTime;
+    osc.frequency.setValueAtTime(659.25, now);
+    osc.frequency.exponentialRampToValueAtTime(987.77, now + 0.15);
+
+    gain.gain.setValueAtTime(0.15, now);
+    gain.gain.exponentialRampToValueAtTime(0.001, now + 0.35);
+
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    osc.start(now);
+    osc.stop(now + 0.35);
+  } catch (e) {
+    console.log('Audio error:', e);
+  }
+}
+
+function showSuccessToast(msg = 'تمت الإضافة بنجاح!') {
+  const toast = document.getElementById('successToast');
+  const toastMsg = document.getElementById('toastMessage');
+  
+  if (!toast) return;
+  
+  toastMsg.textContent = msg;
+  toast.classList.add('active');
+
+  playSuccessSound();
+
+  setTimeout(() => {
+    toast.classList.remove('active');
+  }, 1600);
+}
+
+// -----------------------------------------------------------
+// شريط البحث المطور
 // -----------------------------------------------------------
 const topHeader = document.querySelector('.top-header');
 const searchInput = document.getElementById('searchInput');
 const searchToggleBtn = document.getElementById('searchToggleBtn');
 
-// دالة تصفية النتائج أثناء الكتابة
 window.filterDashboard = function() {
   if (searchInput) {
     const query = searchInput.value.trim();
@@ -145,7 +196,6 @@ window.filterDashboard = function() {
   }
 };
 
-// فتح وإغلاق البحث بالطريقة الانسيابية
 window.toggleSearch = function(show) {
   if (show === undefined) {
     show = !topHeader.classList.contains('search-active');
@@ -161,16 +211,14 @@ window.toggleSearch = function(show) {
     topHeader.classList.remove('search-active');
     if (searchToggleBtn) searchToggleBtn.classList.remove('active');
     if (searchInput) searchInput.value = '';
-    render(); // إعادة عرض جميع الكروت فور إغلاق البحث
+    render();
   }
 };
 
-// ربط الزر السفلي بدالة التبديل
 if (searchToggleBtn) {
   searchToggleBtn.onclick = () => toggleSearch();
 }
 
-// زر الـ Home يغلق البحث ويفرغ القيمة
 window.resetSearch = function() {
   toggleSearch(false);
 };
@@ -179,19 +227,16 @@ window.resetSearch = function() {
 // بقية الوظائف والـ Modals
 // -----------------------------------------------------------
 
-// Accordion Logic
 window.toggleAcc = (header) => {
   header.parentElement.classList.toggle('active');
 };
 
-// Theme Toggle
 document.getElementById('themeBtn').onclick = () => {
   theme = theme === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', theme);
   localStorage.setItem('futuristic_dash_theme', theme);
 };
 
-// Modals Logic
 const secModal = document.getElementById('sectionModal');
 const linkModal = document.getElementById('linkModal');
 const confirmModal = document.getElementById('confirmModal');
@@ -226,7 +271,7 @@ function updateFormFields() {
   }
 }
 
-// Add Section
+// إضافة سكشن جديد مع إظهار Toast والصوت
 document.getElementById('saveSectionBtn').onclick = () => {
   const title = document.getElementById('secTitle').value.trim();
   const type = document.getElementById('secType').value;
@@ -236,9 +281,11 @@ document.getElementById('saveSectionBtn').onclick = () => {
   document.getElementById('secTitle').value = '';
   secModal.classList.remove('active');
   saveData();
+  
+  showSuccessToast('تم إضافة السكشن بنجاح!');
 };
 
-// Add Item
+// إضافة عنصر جديد مع إظهار Toast والصوت
 document.getElementById('saveLinkBtn').onclick = async () => {
   const secId = targetSecSelect.value;
   const sec = data.find(s => s.id === secId);
@@ -273,6 +320,8 @@ document.getElementById('saveLinkBtn').onclick = async () => {
 
   linkModal.classList.remove('active');
   saveData();
+
+  showSuccessToast('تمت إضافة العنصر بنجاح!');
 };
 
 const convertBase64 = (file) => {
@@ -305,16 +354,7 @@ document.getElementById('confirmYesBtn').onclick = () => {
   saveData();
 };
 
-render();
-// تحميل صورة البروفايل المحفوظة عند فتح الصفحة
-window.addEventListener('DOMContentLoaded', () => {
-  const savedAvatar = localStorage.getItem('futuristic_dash_avatar');
-  if (savedAvatar) {
-    document.getElementById('profileImg').src = savedAvatar;
-  }
-});
-
-// دالة رفع وتحويل الصورة إلى Base64 وحفظها
+// رفع صورة البروفايل
 function uploadProfileImage(event) {
   const file = event.target.files[0];
   if (!file) return;
@@ -324,14 +364,13 @@ function uploadProfileImage(event) {
 
   reader.onload = function (e) {
     const base64Image = e.target.result;
-    
-    // تحديث الصورة في الشاشة
-    document.getElementById('profileImg').src = base64Image;
-    
-    // حفظ الصورة في LocalStorage
+    const profileImg = document.getElementById('profileImg');
+    if (profileImg) profileImg.src = base64Image;
     localStorage.setItem('futuristic_dash_avatar', base64Image);
   };
-}// دالة تحديث الساعة والتاريخ
+}
+
+// دالة تحديث الساعة والتاريخ
 function updateClockWidget() {
   const timeElem = document.getElementById('clockTime');
   const dateElem = document.getElementById('clockDate');
@@ -339,19 +378,17 @@ function updateClockWidget() {
   if (!timeElem || !dateElem) return;
 
   const now = new Date();
-  
-  // صيغة الوقت (ساعات : دقائق : ثواني)
   const hours = String(now.getHours()).padStart(2, '0');
   const minutes = String(now.getMinutes()).padStart(2, '0');
   const seconds = String(now.getSeconds()).padStart(2, '0');
   
   timeElem.textContent = `${hours}:${minutes}:${seconds}`;
 
-  // صيغة التاريخ العربي
   const options = { weekday: 'short', month: 'short', day: 'numeric' };
   dateElem.textContent = now.toLocaleDateString('ar-EG', options);
 }
 
-// تشغيل الساعة فوراً وتحديثها كل ثانية
 setInterval(updateClockWidget, 1000);
 updateClockWidget();
+
+render();
