@@ -79,7 +79,6 @@ let data = JSON.parse(localStorage.getItem('futuristic_dash_data')) || defaultDa
 let theme = localStorage.getItem('futuristic_dash_theme') || 'dark';
 let deleteAction = null;
 
-// متغيرات للتحكم في تحرير الملاحظات الحالية
 let currentEditingSecId = null;
 let currentEditingItemId = null;
 
@@ -107,18 +106,18 @@ function saveData() {
   render();
 }
 
-// -----------------------------------------------------------
-// دالة العرض الرئيسية (Render)
-// -----------------------------------------------------------
 function render(filterQuery = '') {
+  if (!grid || !targetSecSelect) return;
   grid.innerHTML = '';
   targetSecSelect.innerHTML = '';
 
+  const query = filterQuery.toLowerCase().trim();
+
   const filteredData = data.filter(sec => {
     const filteredItems = sec.items.filter(item => 
-      item.name.toLowerCase().includes(filterQuery.toLowerCase())
+      item.name.toLowerCase().includes(query)
     );
-    return !filterQuery || filteredItems.length > 0 || sec.title.toLowerCase().includes(filterQuery.toLowerCase());
+    return !query || filteredItems.length > 0 || sec.title.toLowerCase().includes(query);
   });
 
   const normalSections = filteredData.filter(s => s.type === 'normal');
@@ -133,9 +132,9 @@ function render(filterQuery = '') {
 
   const createCardHTML = (sec) => {
     const filteredItems = sec.items.filter(item => 
-      item.name.toLowerCase().includes(filterQuery.toLowerCase())
+      item.name.toLowerCase().includes(query)
     );
-    const itemsToDisplay = filterQuery ? filteredItems : sec.items;
+    const itemsToDisplay = query ? filteredItems : sec.items;
 
     const card = document.createElement('div');
     card.className = 'card glass-card';
@@ -149,7 +148,7 @@ function render(filterQuery = '') {
             <div class="item-wrapper">
               <a href="${item.url}" target="_blank" class="app-link">
                 <div class="icon-wrapper">
-                  ${item.icon.startsWith('data:image') ? `<img src="${item.icon}">` : item.icon}
+                  ${item.icon.startsWith('data:image') ? `<img src="${item.icon}" alt="${item.name}">` : item.icon}
                 </div>
                 <span>${item.name}</span>
               </a>
@@ -157,7 +156,7 @@ function render(filterQuery = '') {
             </div>
           `).join('')}
 
-          ${!filterQuery ? `
+          ${!query ? `
             <div class="item-wrapper add-item-btn-wrapper" onclick="openQuickLinkModal('${sec.id}')">
               <div class="app-link add-link-btn">
                 <div class="icon-wrapper"><i class="fa-solid fa-plus"></i></div>
@@ -173,7 +172,7 @@ function render(filterQuery = '') {
           ${itemsToDisplay.map(item => `
             <div class="acc-item">
               <div class="acc-header" onclick="toggleAcc(this)">
-                <span>${item.icon.startsWith('data:image') ? `<img src="${item.icon}" width="20">` : item.icon} ${item.name}</span>
+                <span>${item.icon.startsWith('data:image') ? `<img src="${item.icon}" width="20" alt="icon">` : item.icon} ${item.name}</span>
                 <button class="btn-delete-sec" onclick="event.stopPropagation(); promptDelete('item', '${sec.id}', '${item.id}')"><i class="fa-solid fa-trash-can"></i></button>
               </div>
               <div class="acc-body">
@@ -201,7 +200,7 @@ function render(filterQuery = '') {
             </div>
           `).join('')}
 
-          ${!filterQuery ? `
+          ${!query ? `
             <div class="add-acc-btn" onclick="openQuickLinkModal('${sec.id}')">
               <i class="fa-solid fa-plus"></i> إضافة موضوع جديد
             </div>
@@ -246,9 +245,6 @@ function render(filterQuery = '') {
   }
 }
 
-// -----------------------------------------------------------
-// التحكم في مودال (Pop-up) الملاحظات التفاعلي والنيون
-// -----------------------------------------------------------
 window.openNotesModal = function(secId, itemId) {
   currentEditingSecId = secId;
   currentEditingItemId = itemId;
@@ -312,9 +308,11 @@ window.copyNotesText = function() {
   }
 };
 
-// -----------------------------------------------------------
-// القوالب الجاهزة والأدوات
-// -----------------------------------------------------------
+window.resetSearch = function() {
+  toggleSearch(false);
+  render();
+};
+
 window.addPresetSection = function(presetKey) {
   const preset = presetSections[presetKey];
   if (!preset) return;
@@ -327,20 +325,21 @@ window.addPresetSection = function(presetKey) {
   };
 
   data.push(newSection);
-  secModal.classList.remove('active');
+  const secModal = document.getElementById('sectionModal');
+  if (secModal) secModal.classList.remove('active');
   saveData();
   showSuccessToast(`تم إضافة سكشن ${preset.title} بنجاح!`);
 };
 
 window.openQuickLinkModal = function(secId) {
-  targetSecSelect.value = secId;
-  updateFormFields();
-  linkModal.classList.add('active');
+  if (targetSecSelect) {
+    targetSecSelect.value = secId;
+    updateFormFields();
+  }
+  const linkModal = document.getElementById('linkModal');
+  if (linkModal) linkModal.classList.add('active');
 };
 
-// -----------------------------------------------------------
-// المؤثرات الصوتية
-// -----------------------------------------------------------
 function playSuccessSound() {
   try {
     const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -391,15 +390,12 @@ function showSuccessToast(msg = 'تمت العملية بنجاح!') {
   setTimeout(() => toast.classList.remove('active'), 1600);
 }
 
-// -----------------------------------------------------------
-// البحث والـ Modals
-// -----------------------------------------------------------
 const topHeader = document.querySelector('.top-header');
 const searchInput = document.getElementById('searchInput');
 const searchToggleBtn = document.getElementById('searchToggleBtn');
 
 window.filterDashboard = function() {
-  if (searchInput) render(searchInput.value.trim());
+  if (searchInput) render(searchInput.value);
 };
 
 window.toggleSearch = function(show) {
@@ -421,27 +417,35 @@ if (searchToggleBtn) searchToggleBtn.onclick = () => toggleSearch();
 
 window.toggleAcc = (header) => header.parentElement.classList.toggle('active');
 
-document.getElementById('themeBtn').onclick = () => {
-  theme = theme === 'dark' ? 'light' : 'dark';
-  document.documentElement.setAttribute('data-theme', theme);
-  localStorage.setItem('futuristic_dash_theme', theme);
-};
+const themeBtn = document.getElementById('themeBtn');
+if (themeBtn) {
+  themeBtn.onclick = () => {
+    theme = theme === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('futuristic_dash_theme', theme);
+  };
+}
 
 const secModal = document.getElementById('sectionModal');
 const linkModal = document.getElementById('linkModal');
 const confirmModal = document.getElementById('confirmModal');
 
-document.getElementById('openSectionModal').onclick = () => secModal.classList.add('active');
-document.getElementById('openLinkModal').onclick = () => {
-  updateFormFields();
-  linkModal.classList.add('active');
-};
+const openSecBtn = document.getElementById('openSectionModal');
+if (openSecBtn) openSecBtn.onclick = () => secModal.classList.add('active');
+
+const openLinkBtn = document.getElementById('openLinkModal');
+if (openLinkBtn) {
+  openLinkBtn.onclick = () => {
+    updateFormFields();
+    linkModal.classList.add('active');
+  };
+}
 
 document.querySelectorAll('.closeModal').forEach(btn => {
   btn.onclick = () => {
-    secModal.classList.remove('active');
-    linkModal.classList.remove('active');
-    confirmModal.classList.remove('active');
+    if (secModal) secModal.classList.remove('active');
+    if (linkModal) linkModal.classList.remove('active');
+    if (confirmModal) confirmModal.classList.remove('active');
     closeNotesModal();
   };
 });
@@ -453,68 +457,104 @@ window.addEventListener('click', (e) => {
   }
 });
 
-targetSecSelect.onchange = updateFormFields;
+// إغلاق النوافذ باستخدام مفتاح Escape
+window.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') {
+    if (secModal) secModal.classList.remove('active');
+    if (linkModal) linkModal.classList.remove('active');
+    if (confirmModal) confirmModal.classList.remove('active');
+    closeNotesModal();
+  }
+});
+
+if (targetSecSelect) targetSecSelect.onchange = updateFormFields;
 
 function updateFormFields() {
+  if (!targetSecSelect) return;
   const secId = targetSecSelect.value;
   const sec = data.find(s => s.id === secId);
   if (!sec) return;
+  
+  const normalFields = document.getElementById('normalFields');
+  const learningFields = document.getElementById('learningFields');
+
   if (sec.type === 'learning') {
-    document.getElementById('normalFields').classList.add('hidden');
-    document.getElementById('learningFields').classList.remove('hidden');
+    if (normalFields) normalFields.classList.add('hidden');
+    if (learningFields) learningFields.classList.remove('hidden');
   } else {
-    document.getElementById('normalFields').classList.remove('hidden');
-    document.getElementById('learningFields').classList.add('hidden');
+    if (normalFields) normalFields.classList.remove('hidden');
+    if (learningFields) learningFields.classList.add('hidden');
   }
 }
 
-document.getElementById('saveSectionBtn').onclick = () => {
-  const title = document.getElementById('secTitle').value.trim();
-  const type = document.getElementById('secType').value;
-  if (!title) return;
-  data.push({ id: 'sec_' + Date.now(), title, type, items: [] });
-  document.getElementById('secTitle').value = '';
-  secModal.classList.remove('active');
-  saveData();
-  showSuccessToast('تم إضافة السكشن بنجاح!');
-};
+const saveSectionBtn = document.getElementById('saveSectionBtn');
+if (saveSectionBtn) {
+  saveSectionBtn.onclick = () => {
+    const titleInput = document.getElementById('secTitle');
+    const typeSelect = document.getElementById('secType');
+    const title = titleInput ? titleInput.value.trim() : '';
+    const type = typeSelect ? typeSelect.value : 'normal';
 
-document.getElementById('saveLinkBtn').onclick = async () => {
-  const secId = targetSecSelect.value;
-  const sec = data.find(s => s.id === secId);
-  const fileInput = document.getElementById('iconFile');
+    if (!title) return;
+    data.push({ id: 'sec_' + Date.now(), title, type, items: [] });
+    if (titleInput) titleInput.value = '';
+    if (secModal) secModal.classList.remove('active');
+    saveData();
+    showSuccessToast('تم إضافة السكشن بنجاح!');
+  };
+}
 
-  let icon = '<i class="fa-solid fa-globe"></i>';
-  if (fileInput.files && fileInput.files[0]) {
-    icon = await convertBase64(fileInput.files[0]);
-  }
+const saveLinkBtn = document.getElementById('saveLinkBtn');
+if (saveLinkBtn) {
+  saveLinkBtn.onclick = async () => {
+    const secId = targetSecSelect.value;
+    const sec = data.find(s => s.id === secId);
+    if (!sec) return;
 
-  if (sec.type === 'normal') {
-    const name = document.getElementById('linkName').value.trim();
-    const url = document.getElementById('linkUrl').value.trim();
-    if (!name || !url) return;
-    sec.items.push({ id: '' + Date.now(), name, url, icon });
-  } else {
-    const name = document.getElementById('topicName').value.trim();
-    const course = document.getElementById('topicCourse').value.trim();
-    const notes = document.getElementById('topicNotes').value.trim();
-    const pdf = document.getElementById('topicPdf').value.trim();
-    if (!name) return;
-    sec.items.push({ id: '' + Date.now(), name, course, notes, pdf, icon });
-  }
+    const fileInput = document.getElementById('iconFile');
+    let icon = '<i class="fa-solid fa-globe"></i>';
 
-  document.getElementById('linkName').value = '';
-  document.getElementById('linkUrl').value = '';
-  document.getElementById('topicName').value = '';
-  document.getElementById('topicCourse').value = '';
-  document.getElementById('topicNotes').value = '';
-  document.getElementById('topicPdf').value = '';
-  fileInput.value = '';
+    if (fileInput && fileInput.files && fileInput.files[0]) {
+      icon = await convertBase64(fileInput.files[0]);
+    }
 
-  linkModal.classList.remove('active');
-  saveData();
-  showSuccessToast('تمت إضافة العنصر بنجاح!');
-};
+    if (sec.type === 'normal') {
+      const nameInput = document.getElementById('linkName');
+      const urlInput = document.getElementById('linkUrl');
+      const name = nameInput ? nameInput.value.trim() : '';
+      const url = urlInput ? urlInput.value.trim() : '';
+
+      if (!name || !url) return;
+      sec.items.push({ id: '' + Date.now(), name, url, icon });
+
+      if (nameInput) nameInput.value = '';
+      if (urlInput) urlInput.value = '';
+    } else {
+      const nameInput = document.getElementById('topicName');
+      const courseInput = document.getElementById('topicCourse');
+      const notesInput = document.getElementById('topicNotes');
+      const pdfInput = document.getElementById('topicPdf');
+
+      const name = nameInput ? nameInput.value.trim() : '';
+      const course = courseInput ? courseInput.value.trim() : '';
+      const notes = notesInput ? notesInput.value.trim() : '';
+      const pdf = pdfInput ? pdfInput.value.trim() : '';
+
+      if (!name) return;
+      sec.items.push({ id: '' + Date.now(), name, course, notes, pdf, icon });
+
+      if (nameInput) nameInput.value = '';
+      if (courseInput) courseInput.value = '';
+      if (notesInput) notesInput.value = '';
+      if (pdfInput) pdfInput.value = '';
+    }
+
+    if (fileInput) fileInput.value = '';
+    if (linkModal) linkModal.classList.remove('active');
+    saveData();
+    showSuccessToast('تمت إضافة العنصر بنجاح!');
+  };
+}
 
 const convertBase64 = (file) => {
   return new Promise((resolve, reject) => {
@@ -526,22 +566,25 @@ const convertBase64 = (file) => {
 };
 
 window.promptDelete = (type, secId, itemId = null) => {
-  confirmModal.classList.add('active');
+  if (confirmModal) confirmModal.classList.add('active');
   deleteAction = { type, secId, itemId };
 };
 
-document.getElementById('confirmYesBtn').onclick = () => {
-  if (!deleteAction) return;
-  if (deleteAction.type === 'section') {
-    data = data.filter(s => s.id !== deleteAction.secId);
-  } else if (deleteAction.type === 'item') {
-    const sec = data.find(s => s.id === deleteAction.secId);
-    if (sec) sec.items = sec.items.filter(i => i.id !== deleteAction.itemId);
-  }
-  confirmModal.classList.remove('active');
-  deleteAction = null;
-  saveData();
-};
+const confirmYesBtn = document.getElementById('confirmYesBtn');
+if (confirmYesBtn) {
+  confirmYesBtn.onclick = () => {
+    if (!deleteAction) return;
+    if (deleteAction.type === 'section') {
+      data = data.filter(s => s.id !== deleteAction.secId);
+    } else if (deleteAction.type === 'item') {
+      const sec = data.find(s => s.id === deleteAction.secId);
+      if (sec) sec.items = sec.items.filter(i => i.id !== deleteAction.itemId);
+    }
+    if (confirmModal) confirmModal.classList.remove('active');
+    deleteAction = null;
+    saveData();
+  };
+}
 
 function uploadProfileImage(event) {
   const file = event.target.files[0];
