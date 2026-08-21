@@ -435,3 +435,125 @@ body {
 .btn-danger { background: #ef4444; color: white; }
 
 .hidden { display: none !important; }
+/* ودجت الساعة الزجاجي تحت على الشمال */
+.bottom-time-widget {
+  position: fixed;
+  bottom: 30px;
+  left: 30px;
+  height: 58px; /* نفس ارتفاع دائرة البروفايل والـ Bottom Nav */
+  padding: 0 18px;
+  background: rgba(18, 18, 28, 0.6);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  border-top: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 30px;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5);
+  z-index: 1000;
+  transition: all 0.4s var(--ease-spring);
+  cursor: default;
+  user-select: none;
+}
+
+.bottom-time-widget:hover {
+  transform: translateY(-5px);
+  border-color: rgba(6, 182, 212, 0.4);
+  box-shadow: 0 15px 30px rgba(6, 182, 212, 0.25);
+}
+
+.time-display {
+  font-family: 'Consolas', 'Courier New', monospace; /* خط ديجيتال محدد */
+  font-size: 1.1rem;
+  font-weight: 800;
+  letter-spacing: 1px;
+  background: linear-gradient(135deg, #fff, var(--accent-cyan));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  line-height: 1.2;
+}
+
+.date-display {
+  font-size: 0.72rem;
+  color: var(--text-secondary);
+  font-weight: 600;
+}
+/* ========================================== */
+/* إعدادات الريسبونسيف للموبايل والشاشات الصغيرة */
+/* ========================================== */
+
+@media (max-width: 768px) {
+
+  /* 1. تقليل المسافات الجانبية للمحتوى الرئيسي */
+  .main-content {
+    padding: 1.5rem 1rem;
+  }
+
+  /* 2. ضبط الشبكة (Grid) لتصبح عمود واحد للموبايل */
+  .dashboard-grid {
+    grid-template-columns: 1fr;
+    gap: 1.2rem;
+  }
+
+  /* 3. تصغير وتنسيق الشريط السفلي والساعة والبروفايل */
+  .bottom-nav-container {
+    bottom: 15px;
+    height: 50px;
+  }
+
+  .bottom-nav {
+    gap: 6px;
+    padding: 4px 8px;
+  }
+
+  .nav-item {
+    width: 38px;
+    height: 38px;
+    font-size: 1rem;
+  }
+
+  /* 4. ضبط البروفايل في الموبايل */
+  .bottom-profile-avatar {
+    bottom: 15px;
+    right: 12px;
+    width: 48px;
+    height: 48px;
+  }
+
+  /* 5. ضبط ودجت الساعة وتصغير حجمها */
+  .bottom-time-widget {
+    bottom: 15px;
+    left: 12px;
+    height: 48px;
+    padding: 0 10px;
+  }
+
+  .time-display {
+    font-size: 0.9rem;
+  }
+
+  .date-display {
+    font-size: 0.6rem;
+  }
+
+  /* 6. منع شريط البحث من الخروج عن حدود الشاشة */
+  .expand-search-wrapper {
+    width: 90%;
+  }
+}
+
+/* للشاشات الصغرى جداً (الموبايلات الصغيرة < 480px) */
+@media (max-width: 480px) {
+
+  /* إخفاء ودجت الساعة في الشاشات الضيقة جداً لمنع التداخل مع الشريط السفلي */
+  .bottom-time-widget {
+    display: none;
+  }
+
+  .bottom-nav-container {
+    left: 42%; /* محاذاة شريط التنقل */
+  }
+}
