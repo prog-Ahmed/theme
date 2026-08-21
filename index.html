@@ -23,13 +23,13 @@
 
   <!-- المحتوى الرئيسي -->
 <main class="main-content">
-  <!-- شريط البحث السحري (مستقل بدون هيدر علوي) -->
+  <!-- شريط البحث السحري المدمج -->
   <div class="top-header" id="topHeader">
     <div class="expand-search-wrapper" id="searchWrapper">
       <div class="neon-search-box">
         <i class="fa-solid fa-magnifying-glass search-icon-inside"></i>
         <input type="text" id="searchInput" placeholder="ابحث عن أي موقع أو تقنية..." oninput="filterDashboard()">
-        <button class="close-search-btn" onclick="toggleSearch(false)">
+        <button class="close-search-btn" aria-label="إغلاق البحث" onclick="toggleSearch(false)">
           <i class="fa-solid fa-xmark"></i>
         </button>
       </div>
@@ -41,34 +41,36 @@
   </div>
 </main>
 
-<!-- دائرة الصورة العائمة تحت على اليمين -->
-<!-- دائرة الصورة العائمة تحت على اليمين مع إمكانية رفع صورة -->
-<div class="bottom-profile-avatar" title="تغيير الصورة الشخصية" onclick="document.getElementById('profileInput').click()">
+<!-- دائرة الصورة العائمة مع أيقونة التعديل في الـ Hover -->
+<div class="bottom-profile-avatar" role="button" tabindex="0" aria-label="تغيير الصورة الشخصية" title="تغيير الصورة الشخصية" onclick="document.getElementById('profileInput').click()" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();document.getElementById('profileInput').click();}">
   <img src="https://ui-avatars.com/api/?name=User&background=a855f7&color=fff&bold=true" alt="User Profile" id="profileImg">
-  <!-- input مخفي لاختيار الصورة -->
+  <div class="avatar-edit-overlay">
+    <i class="fa-solid fa-camera"></i>
+  </div>
   <input type="file" id="profileInput" accept="image/*" style="display: none;" onchange="uploadProfileImage(event)">
 </div>
-<!-- ودجت الساعة والتاريخ الذكي تحت على الشمال -->
+<!-- ودجت الساعة والتاريخ -->
 <div class="bottom-time-widget">
   <div class="time-display" id="clockTime">00:00:00</div>
   <div class="date-display" id="clockDate">جاري التحميل...</div>
 </div>
-  <!-- Floating Navigation Bar الزجاجية السفلية -->
+
+  <!-- Floating Navigation Bar -->
   <div class="bottom-nav-container">
     <nav class="bottom-nav">
-      <button class="nav-item active" title="الرئيسية" onclick="resetSearch()">
+      <button class="nav-item active" title="الرئيسية" aria-label="الرئيسية" onclick="resetSearch()">
         <i class="fa-solid fa-house"></i>
       </button>
-      <button class="nav-item" id="searchToggleBtn" title="بحث">
+      <button class="nav-item" id="searchToggleBtn" title="بحث" aria-label="بحث">
         <i class="fa-solid fa-magnifying-glass"></i>
       </button>
-      <button class="nav-item" id="openSectionModal" title="إضافة سكشن">
+      <button class="nav-item" id="openSectionModal" title="إضافة سكشن" aria-label="إضافة سكشن جديد">
         <i class="fa-solid fa-plus"></i>
       </button>
-      <button class="nav-item" id="openLinkModal" title="إضافة محتوى">
+      <button class="nav-item" id="openLinkModal" title="إضافة محتوى" aria-label="إضافة محتوى جديد">
         <i class="fa-solid fa-link"></i>
       </button>
-      <button class="nav-item" id="themeBtn" title="المظهر">
+      <button class="nav-item" id="themeBtn" title="المظهر" aria-label="تبديل المظهر الداكن والفاتح">
         <i class="fa-solid fa-moon"></i>
       </button>
     </nav>
@@ -84,48 +86,53 @@
       </div>
       <div class="form-group">
         <label>نوع السكشن</label>
-        <select id="secType">
-          <option value="normal">🌐 سكشن عادي (روابط ومواقع)</option>
-          <option value="learning">🎓 سكشن تعليمي (مسار / آكورديون)</option>
-        </select>
+        <div class="custom-shopify-select">
+          <select id="secType">
+            <option value="normal">🌐 سكشن عادي (روابط ومواقع)</option>
+            <option value="learning">🎓 سكشن تعليمي (مسار / آكورديون)</option>
+          </select>
+        </div>
       </div>
       <div class="modal-actions">
         <button class="btn btn-primary" id="saveSectionBtn">حفظ السكشن</button>
         <button class="btn btn-secondary closeModal">إلغاء</button>
       </div>
       <div class="preset-buttons">
-  <p style="margin-bottom: 8px; font-size: 0.9rem; color: #aaa;">أو أضف قسم جاهز بنقرة واحدة:</p>
-  <button type="button" class="btn-preset" onclick="addPresetSection('ai')">🤖 أدوات الذكاء الاصطناعي</button>
-  <button type="button" class="btn-preset" onclick="addPresetSection('freelance')">💼 Freelance</button>
-  <button type="button" class="btn-preset" onclick="addPresetSection('chat')">💬 الشات والتواصل</button>
-  <button type="button" class="btn-preset" onclick="addPresetSection('media')">🎬 الميديا والصناع</button>
-</div>
+        <p style="margin-bottom: 8px; font-size: 0.9rem; color: #aaa;">أو أضف قسم جاهز بنقرة واحدة:</p>
+        <button type="button" class="btn-preset" onclick="addPresetSection('ai')">🤖 أدوات الذكاء الاصطناعي</button>
+        <button type="button" class="btn-preset" onclick="addPresetSection('freelance')">💼 Freelance</button>
+        <button type="button" class="btn-preset" onclick="addPresetSection('chat')">💬 الشات والتواصل</button>
+        <button type="button" class="btn-preset" onclick="addPresetSection('media')">🎬 الميديا والصناع</button>
+      </div>
     </div>
   </div>
 
-  <!-- Modal إضافة محتوى -->
+  <!-- Modal إضافة / تعديل محتوى -->
   <div class="modal-overlay" id="linkModal">
-    <div class="modal glass-card">
-      <h3><i class="fa-solid fa-circle-plus"></i> إضافة محتوى للسكشن</h3>
-      <div class="form-group">
+    <div class="modal glass-card modal-lg">
+      <h3 id="linkModalTitle"><i class="fa-solid fa-circle-plus"></i> إضافة محتوى للسكشن</h3>
+      
+      <div class="form-group" id="targetSecGroup">
         <label>اختر السكشن</label>
-        <select id="targetSecSelect"></select>
+        <div class="custom-shopify-select">
+          <select id="targetSecSelect"></select>
+        </div>
       </div>
 
       <div id="normalFields">
         <div class="form-group">
-          <label>اسم الموقع/الرابط</label>
+          <label>اسم الموقع/الرابط <span class="required-star">*</span></label>
           <input type="text" id="linkName" placeholder="مثال: Facebook">
         </div>
         <div class="form-group">
-          <label>رابط الموقع (URL)</label>
+          <label>رابط الموقع (URL) <span class="required-star">*</span></label>
           <input type="url" id="linkUrl" placeholder="https://example.com">
         </div>
       </div>
 
       <div id="learningFields" class="hidden">
         <div class="form-group">
-          <label>اسم التقنية/الموضوع</label>
+          <label>اسم التقنية/الموضوع <span class="required-star">*</span></label>
           <input type="text" id="topicName" placeholder="مثال: HTML5 أو JavaScript">
         </div>
         <div class="form-group">
@@ -142,13 +149,31 @@
         </div>
       </div>
 
+      <!-- معرض الأيقونات الجاهزة والمقسمة -->
       <div class="form-group">
-        <label>أيقونة خاصة (رفع صورة من الجهاز - اختياري)</label>
-        <input type="file" id="iconFile" accept="image/*">
+        <label>اختر أيقونة من المعرض أو ارفع أيقونة خاصة</label>
+        <div class="icon-picker-tabs">
+          <button type="button" class="icon-tab active" data-category="social" onclick="switchIconTab('social', event)">سوشيال</button>
+          <button type="button" class="icon-tab" data-category="tools" onclick="switchIconTab('tools', event)">أدوات وبرمجة</button>
+          <button type="button" class="icon-tab" data-category="business" onclick="switchIconTab('business', event)">أعمال</button>
+          <button type="button" class="icon-tab" data-category="general" onclick="switchIconTab('general', event)">عام</button>
+        </div>
+        
+        <div class="icon-picker-grid" id="iconPickerGrid">
+          <!-- الأيقونات بتنزل هنا بالـ JS -->
+        </div>
+
+        <div class="custom-icon-upload">
+          <label for="iconFile" class="file-upload-label">
+            <i class="fa-solid fa-cloud-arrow-up"></i> رفع أيقونة من الجهاز
+          </label>
+          <input type="file" id="iconFile" accept="image/*" onchange="handleIconFileUpload(event)">
+          <span id="fileNameDisplay" class="file-name-span"></span>
+        </div>
       </div>
 
       <div class="modal-actions">
-        <button class="btn btn-primary" id="saveLinkBtn">إضافة المحتوى</button>
+        <button class="btn btn-primary" id="saveLinkBtn">حفظ المحتوى</button>
         <button class="btn btn-secondary closeModal">إلغاء</button>
       </div>
     </div>
@@ -165,51 +190,51 @@
       </div>
     </div>
   </div>
-<!-- نوتفيقيشن النجاح الاحترافي في منتصف الشاشة -->
-<div class="success-toast-overlay" id="successToast">
-  <div class="success-toast-card">
-    <div class="success-icon-wrapper">
-      <svg class="checkmark-svg" viewBox="0 0 52 52">
-        <circle class="checkmark-circle" cx="26" cy="26" r="23" fill="none"/>
-        <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
-      </svg>
+
+  <!-- نوتفيقيشن النجاح -->
+  <div class="success-toast-overlay" id="successToast">
+    <div class="success-toast-card">
+      <div class="success-icon-wrapper">
+        <svg class="checkmark-svg" viewBox="0 0 52 52">
+          <circle class="checkmark-circle" cx="26" cy="26" r="23" fill="none"/>
+          <path class="checkmark-check" fill="none" d="M14.1 27.2l7.1 7.2 16.7-16.8"/>
+        </svg>
+      </div>
+      <h3 id="toastMessage">تمت الإضافة بنجاح!</h3>
     </div>
-    <h3 id="toastMessage">تمت الإضافة بنجاح!</h3>
   </div>
-</div>
-<!-- Modal بوب آب الملاحظات الشفاف والكبير -->
-<!-- Pop-up الملاحظات بتصميم النيون والزجاج المظلم -->
-<!-- Pop-up الملاحظات التفاعلي المباشر -->
-<div id="notesModal" class="notes-modal-overlay">
-  <div class="notes-modal-card">
-    <div class="neon-accent-bar"></div>
-    <button class="btn-close-notes" onclick="closeNotesModal()">&times;</button>
-    
-    <div class="notes-modal-header">
-      <span class="notes-badge">Interactive Note</span>
-      <h3 id="notesModalTitle">عنوان الكورس</h3>
-    </div>
 
-    <div class="notes-modal-body">
-      <!-- مربع كتابة قابل للتعديل والإضافة -->
-      <textarea id="notesTextarea" placeholder="اكتب ملاحظاتك هنا..."></textarea>
-    </div>
+  <!-- Pop-up الملاحظات -->
+  <div id="notesModal" class="notes-modal-overlay">
+    <div class="notes-modal-card">
+      <div class="neon-accent-bar"></div>
+      <button class="btn-close-notes" onclick="closeNotesModal()">&times;</button>
+      
+      <div class="notes-modal-header">
+        <span class="notes-badge">Interactive Note</span>
+        <h3 id="notesModalTitle">عنوان الكورس</h3>
+      </div>
 
-    <div class="notes-modal-footer">
-      <button onclick="deleteCurrentNote()" class="btn-neon-delete">
-        <i class="fa-solid fa-trash-can"></i> مسح الملاحظة
-      </button>
-      <div class="footer-right-actions">
-        <button onclick="copyNotesText()" class="btn-neon-action">
-          <i class="fa-regular fa-copy"></i> نسخ
+      <div class="notes-modal-body">
+        <textarea id="notesTextarea" placeholder="اكتب ملاحظاتك هنا..."></textarea>
+      </div>
+
+      <div class="notes-modal-footer">
+        <button onclick="deleteCurrentNote()" class="btn-neon-delete">
+          <i class="fa-solid fa-trash-can"></i> مسح الملاحظة
         </button>
-        <button onclick="saveCurrentNote()" class="btn-neon-save">
-          <i class="fa-solid fa-floppy-disk"></i> حفظ التعديل
-        </button>
+        <div class="footer-right-actions">
+          <button onclick="copyNotesText()" class="btn-neon-action">
+            <i class="fa-regular fa-copy"></i> نسخ
+          </button>
+          <button onclick="saveCurrentNote()" class="btn-neon-save">
+            <i class="fa-solid fa-floppy-disk"></i> حفظ التعديل
+          </button>
+        </div>
       </div>
     </div>
   </div>
-</div>
+
   <script src="script.js"></script>
 </body>
 </html>
