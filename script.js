@@ -4,9 +4,9 @@ const defaultData = [
     title: "مواقع السوشيال والشبكات",
     type: "normal",
     items: [
-      { id: "1", name: "فيسبوك", url: "https://facebook.com", icon: '<i class="fa-brands fa-facebook"></i>' },
-      { id: "2", name: "إنستغرام", url: "https://instagram.com", icon: '<i class="fa-brands fa-instagram"></i>' },
-      { id: "3", name: "جيت هاب", url: "https://github.com", icon: '<i class="fa-brands fa-github"></i>' }
+      { id: "1", name: "فيسبوك", url: "https://facebook.com", icon: '<i class="fa-brands fa-facebook" style="color: #1877f2;"></i>' },
+      { id: "2", name: "إنستغرام", url: "https://instagram.com", icon: '<i class="fa-brands fa-instagram" style="color: #e4405f;"></i>' },
+      { id: "3", name: "جيت هاب", url: "https://github.com", icon: '<i class="fa-brands fa-github" style="color: #ffffff;"></i>' }
     ]
   },
   {
@@ -20,7 +20,7 @@ const defaultData = [
         course: "https://youtube.com",
         notes: "التركيز على العناصر الدلالية ومقاييس SEO و Accessibility.",
         pdf: "https://drive.google.com",
-        icon: '<i class="fa-brands fa-html5"></i>'
+        icon: '<i class="fa-brands fa-html5" style="color: #e34f26;"></i>'
       },
       {
         id: "102",
@@ -28,7 +28,7 @@ const defaultData = [
         course: "https://youtube.com",
         notes: "دراسة الـ Promises, Async/Await, والـ Closures في JS.",
         pdf: "",
-        icon: '<i class="fa-brands fa-js"></i>'
+        icon: '<i class="fa-brands fa-js" style="color: #f7df1e;"></i>'
       }
     ]
   }
@@ -39,48 +39,104 @@ const presetSections = {
     title: "أدوات الذكاء الاصطناعي (AI)",
     type: "normal",
     items: [
-      { id: "preset_ai_1", name: "ChatGPT", url: "https://chatgpt.com", icon: '<i class="fa-solid fa-robot"></i>' },
-      { id: "preset_ai_2", name: "Claude AI", url: "https://claude.ai", icon: '<i class="fa-solid fa-brain"></i>' },
-      { id: "preset_ai_3", name: "Gemini", url: "https://gemini.google.com", icon: '<i class="fa-solid fa-sparkles"></i>' },
-      { id: "preset_ai_4", name: "v0.dev", url: "https://v0.dev", icon: '<i class="fa-solid fa-code"></i>' }
+      { id: "preset_ai_1", name: "ChatGPT", url: "https://chatgpt.com", icon: '<i class="fa-solid fa-robot" style="color: #10a37f;"></i>' },
+      { id: "preset_ai_2", name: "Claude AI", url: "https://claude.ai", icon: '<i class="fa-solid fa-brain" style="color: #d97706;"></i>' },
+      { id: "preset_ai_3", name: "Gemini", url: "https://gemini.google.com", icon: '<i class="fa-solid fa-sparkles" style="color: #8e8ea0;"></i>' },
+      { id: "preset_ai_4", name: "v0.dev", url: "https://v0.dev", icon: '<i class="fa-solid fa-code" style="color: #000000;"></i>' }
     ]
   },
   freelance: {
     title: "منصات العمل الحر (Freelance)",
     type: "normal",
     items: [
-      { id: "preset_fl_1", name: "Upwork", url: "https://upwork.com", icon: '<i class="fa-solid fa-briefcase"></i>' },
-      { id: "preset_fl_2", name: "Fiverr", url: "https://fiverr.com", icon: '<i class="fa-solid fa-laptop-code"></i>' },
-      { id: "preset_fl_3", name: "Mostaql", url: "https://mostaql.com", icon: '<i class="fa-solid fa-handshake"></i>' },
-      { id: "preset_fl_4", name: "Khamsat", url: "https://khamsat.com", icon: '<i class="fa-solid fa-store"></i>' }
+      { id: "preset_fl_1", name: "Upwork", url: "https://upwork.com", icon: '<i class="fa-solid fa-briefcase" style="color: #14a800;"></i>' },
+      { id: "preset_fl_2", name: "Fiverr", url: "https://fiverr.com", icon: '<i class="fa-solid fa-laptop-code" style="color: #1dbf73;"></i>' },
+      { id: "preset_fl_3", name: "Mostaql", url: "https://mostaql.com", icon: '<i class="fa-solid fa-handshake" style="color: #238636;"></i>' },
+      { id: "preset_fl_4", name: "Khamsat", url: "https://khamsat.com", icon: '<i class="fa-solid fa-store" style="color: #ff9800;"></i>' }
     ]
   },
   chat: {
     title: "تطبيقات المحادثة والتواصل",
     type: "normal",
     items: [
-      { id: "preset_ch_1", name: "WhatsApp Web", url: "https://web.whatsapp.com", icon: '<i class="fa-brands fa-whatsapp"></i>' },
-      { id: "preset_ch_2", name: "Telegram Web", url: "https://web.telegram.org", icon: '<i class="fa-brands fa-telegram"></i>' },
-      { id: "preset_ch_3", name: "Discord", url: "https://discord.com", icon: '<i class="fa-brands fa-discord"></i>' }
+      { id: "preset_ch_1", name: "WhatsApp Web", url: "https://web.whatsapp.com", icon: '<i class="fa-brands fa-whatsapp" style="color: #25d366;"></i>' },
+      { id: "preset_ch_2", name: "Telegram Web", url: "https://web.telegram.org", icon: '<i class="fa-brands fa-telegram" style="color: #0088cc;"></i>' },
+      { id: "preset_ch_3", name: "Discord", url: "https://discord.com", icon: '<i class="fa-brands fa-discord" style="color: #5865f2;"></i>' }
     ]
   },
   media: {
     title: "صناع المحتوى والميديا",
     type: "normal",
     items: [
-      { id: "preset_me_1", name: "Canva", url: "https://canva.com", icon: '<i class="fa-solid fa-palette"></i>' },
-      { id: "preset_me_2", name: "CapCut", url: "https://capcut.com", icon: '<i class="fa-solid fa-video"></i>' },
-      { id: "preset_me_3", name: "YouTube Studio", url: "https://studio.youtube.com", icon: '<i class="fa-brands fa-youtube"></i>' }
+      { id: "preset_me_1", name: "Canva", url: "https://canva.com", icon: '<i class="fa-solid fa-palette" style="color: #00c4cc;"></i>' },
+      { id: "preset_me_2", name: "CapCut", url: "https://capcut.com", icon: '<i class="fa-solid fa-video" style="color: #ffffff;"></i>' },
+      { id: "preset_me_3", name: "YouTube Studio", url: "https://studio.youtube.com", icon: '<i class="fa-brands fa-youtube" style="color: #ff0000;"></i>' }
     ]
   }
 };
 
-let data = JSON.parse(localStorage.getItem('futuristic_dash_data')) || defaultData;
+const iconGallery = {
+  social: [
+    { name: "Facebook", icon: '<i class="fa-brands fa-facebook" style="color: #1877f2;"></i>' },
+    { name: "Instagram", icon: '<i class="fa-brands fa-instagram" style="color: #e4405f;"></i>' },
+    { name: "Twitter/X", icon: '<i class="fa-brands fa-x-twitter" style="color: #ffffff;"></i>' },
+    { name: "LinkedIn", icon: '<i class="fa-brands fa-linkedin" style="color: #0a66c2;"></i>' },
+    { name: "YouTube", icon: '<i class="fa-brands fa-youtube" style="color: #ff0000;"></i>' },
+    { name: "TikTok", icon: '<i class="fa-brands fa-tiktok" style="color: #ff0050;"></i>' },
+    { name: "WhatsApp", icon: '<i class="fa-brands fa-whatsapp" style="color: #25d366;"></i>' },
+    { name: "Telegram", icon: '<i class="fa-brands fa-telegram" style="color: #0088cc;"></i>' },
+    { name: "Pinterest", icon: '<i class="fa-brands fa-pinterest" style="color: #bd081c;"></i>' },
+    { name: "Snapchat", icon: '<i class="fa-brands fa-snapchat" style="color: #fffc00;"></i>' }
+  ],
+  tools: [
+    { name: "HTML5", icon: '<i class="fa-brands fa-html5" style="color: #e34f26;"></i>' },
+    { name: "CSS3", icon: '<i class="fa-brands fa-css3-alt" style="color: #1572b6;"></i>' },
+    { name: "JavaScript", icon: '<i class="fa-brands fa-js" style="color: #f7df1e;"></i>' },
+    { name: "React", icon: '<i class="fa-brands fa-react" style="color: #61dafb;"></i>' },
+    { name: "Node.js", icon: '<i class="fa-brands fa-node-js" style="color: #339933;"></i>' },
+    { name: "Shopify", icon: '<i class="fa-brands fa-shopify" style="color: #95bf47;"></i>' },
+    { name: "GitHub", icon: '<i class="fa-brands fa-github" style="color: #ffffff;"></i>' },
+    { name: "Code", icon: '<i class="fa-solid fa-code" style="color: #06b6d4;"></i>' },
+    { name: "Terminal", icon: '<i class="fa-solid fa-terminal" style="color: #a855f7;"></i>' },
+    { name: "Database", icon: '<i class="fa-solid fa-database" style="color: #3b82f6;"></i>' }
+  ],
+  business: [
+    { name: "Briefcase", icon: '<i class="fa-solid fa-briefcase" style="color: #eab308;"></i>' },
+    { name: "Store", icon: '<i class="fa-solid fa-store" style="color: #3b82f6;"></i>' },
+    { name: "Cart", icon: '<i class="fa-solid fa-cart-shopping" style="color: #22c55e;"></i>' },
+    { name: "Money", icon: '<i class="fa-solid fa-money-bill-wave" style="color: #10b981;"></i>' },
+    { name: "Chart", icon: '<i class="fa-solid fa-chart-line" style="color: #ec4899;"></i>' },
+    { name: "Laptop", icon: '<i class="fa-solid fa-laptop" style="color: #06b6d4;"></i>' }
+  ],
+  general: [
+    { name: "Globe", icon: '<i class="fa-solid fa-globe" style="color: #06b6d4;"></i>' },
+    { name: "Star", icon: '<i class="fa-solid fa-star" style="color: #eab308;"></i>' },
+    { name: "Bookmark", icon: '<i class="fa-solid fa-bookmark" style="color: #a855f7;"></i>' },
+    { name: "Graduation", icon: '<i class="fa-solid fa-graduation-cap" style="color: #3b82f6;"></i>' },
+    { name: "Book", icon: '<i class="fa-solid fa-book" style="color: #ef4444;"></i>' },
+    { name: "Gear", icon: '<i class="fa-solid fa-gear" style="color: #94a3b8;"></i>' }
+  ]
+};
+
+function loadData() {
+  try {
+    const raw = localStorage.getItem('futuristic_dash_data');
+    return raw ? JSON.parse(raw) : defaultData;
+  } catch (e) {
+    console.warn('تعذّرت قراءة البيانات المحفوظة، تم الرجوع للبيانات الافتراضية.', e);
+    return defaultData;
+  }
+}
+
+let data = loadData();
 let theme = localStorage.getItem('futuristic_dash_theme') || 'dark';
 let deleteAction = null;
 
 let currentEditingSecId = null;
 let currentEditingItemId = null;
+let selectedIconHTML = '<i class="fa-solid fa-globe"></i>';
+let isEditMode = false;
+let draggedSecId = null;
 
 document.documentElement.setAttribute('data-theme', theme);
 
@@ -96,13 +152,19 @@ window.addEventListener('DOMContentLoaded', () => {
     const profileImg = document.getElementById('profileImg');
     if (profileImg) profileImg.src = savedAvatar;
   }
+  
+  renderIconGallery('social');
 });
 
 const grid = document.getElementById('gridContainer');
 const targetSecSelect = document.getElementById('targetSecSelect');
 
 function saveData() {
-  localStorage.setItem('futuristic_dash_data', JSON.stringify(data));
+  try {
+    localStorage.setItem('futuristic_dash_data', JSON.stringify(data));
+  } catch (e) {
+    alert('مساحة التخزين المحلي ممتلئة، تعذّر حفظ آخر تعديل. جرّب تحذف بعض الأيقونات المرفوعة يدويًا.');
+  }
   render();
 }
 
@@ -134,10 +196,47 @@ function render(filterQuery = '') {
     const filteredItems = sec.items.filter(item => 
       item.name.toLowerCase().includes(query)
     );
-    const itemsToDisplay = query ? filteredItems : sec.items;
+    const titleMatches = sec.title.toLowerCase().includes(query);
+    const itemsToDisplay = (query && !titleMatches) ? filteredItems : sec.items;
 
     const card = document.createElement('div');
-    card.className = 'card glass-card';
+    card.className = 'card glass-card draggable-card';
+    card.setAttribute('draggable', 'true');
+    card.setAttribute('data-sec-id', sec.id);
+
+    // سحب وإفلات الأقسام
+    card.addEventListener('dragstart', (e) => {
+      draggedSecId = sec.id;
+      card.classList.add('dragging');
+    });
+
+    card.addEventListener('dragend', () => {
+      card.classList.remove('dragging');
+      draggedSecId = null;
+    });
+
+    card.addEventListener('dragover', (e) => {
+      e.preventDefault();
+      card.classList.add('drag-over');
+    });
+
+    card.addEventListener('dragleave', () => {
+      card.classList.remove('drag-over');
+    });
+
+    card.addEventListener('drop', (e) => {
+      e.preventDefault();
+      card.classList.remove('drag-over');
+      if (draggedSecId && draggedSecId !== sec.id) {
+        const fromIdx = data.findIndex(s => s.id === draggedSecId);
+        const toIdx = data.findIndex(s => s.id === sec.id);
+        if (fromIdx > -1 && toIdx > -1) {
+          const [moved] = data.splice(fromIdx, 1);
+          data.splice(toIdx, 0, moved);
+          saveData();
+        }
+      }
+    });
 
     let contentHTML = '';
 
@@ -146,13 +245,16 @@ function render(filterQuery = '') {
         <div class="items-list">
           ${itemsToDisplay.map(item => `
             <div class="item-wrapper">
-              <a href="${item.url}" target="_blank" class="app-link">
+              <a href="${item.url}" target="_blank" rel="noopener noreferrer" class="app-link">
                 <div class="icon-wrapper">
                   ${item.icon.startsWith('data:image') ? `<img src="${item.icon}" alt="${item.name}">` : item.icon}
                 </div>
                 <span>${item.name}</span>
               </a>
-              <button class="btn-del-item" onclick="promptDelete('item', '${sec.id}', '${item.id}')">✕</button>
+              <div class="item-actions-overlay">
+                <button class="btn-edit-item" onclick="openEditItemModal('${sec.id}', '${item.id}')" title="تعديل"><i class="fa-solid fa-pen"></i></button>
+                <button class="btn-del-item" onclick="promptDelete('item', '${sec.id}', '${item.id}')" title="حذف">✕</button>
+              </div>
             </div>
           `).join('')}
 
@@ -173,12 +275,15 @@ function render(filterQuery = '') {
             <div class="acc-item">
               <div class="acc-header" onclick="toggleAcc(this)">
                 <span>${item.icon.startsWith('data:image') ? `<img src="${item.icon}" width="20" alt="icon">` : item.icon} ${item.name}</span>
-                <button class="btn-delete-sec" onclick="event.stopPropagation(); promptDelete('item', '${sec.id}', '${item.id}')"><i class="fa-solid fa-trash-can"></i></button>
+                <div class="acc-actions">
+                  <button class="btn-edit-item" onclick="event.stopPropagation(); openEditItemModal('${sec.id}', '${item.id}')" title="تعديل"><i class="fa-solid fa-pen"></i></button>
+                  <button class="btn-delete-sec" onclick="event.stopPropagation(); promptDelete('item', '${sec.id}', '${item.id}')" title="حذف"><i class="fa-solid fa-trash-can"></i></button>
+                </div>
               </div>
               <div class="acc-body">
                 <div class="course-action-icons">
                   ${item.course ? `
-                    <a href="${item.course}" target="_blank" class="course-icon-btn" title="مشاهدة الشرح">
+                    <a href="${item.course}" target="_blank" rel="noopener noreferrer" class="course-icon-btn" title="مشاهدة الشرح">
                       <i class="fa-solid fa-circle-play"></i>
                       <span>الشرح</span>
                     </a>
@@ -190,7 +295,7 @@ function render(filterQuery = '') {
                   </button>
 
                   ${item.pdf ? `
-                    <a href="${item.pdf}" target="_blank" class="course-icon-btn" title="تحميل المراجع PDF">
+                    <a href="${item.pdf}" target="_blank" rel="noopener noreferrer" class="course-icon-btn" title="تحميل المراجع PDF">
                       <i class="fa-solid fa-file-pdf"></i>
                       <span>المراجع</span>
                     </a>
@@ -211,7 +316,7 @@ function render(filterQuery = '') {
 
     card.innerHTML = `
       <div class="card-header">
-        <h2>${sec.title}</h2>
+        <h2><i class="fa-solid fa-grip-vertical drag-handle"></i> ${sec.title}</h2>
         <button class="btn-delete-sec" onclick="promptDelete('section', '${sec.id}')"><i class="fa-solid fa-trash-can"></i></button>
       </div>
       ${contentHTML}
@@ -245,6 +350,46 @@ function render(filterQuery = '') {
   }
 }
 
+// معرض الأيقونات
+window.switchIconTab = function(category, evt) {
+  document.querySelectorAll('.icon-tab').forEach(tab => tab.classList.remove('active'));
+  const btn = (evt && evt.currentTarget) || document.querySelector(`.icon-tab[data-category="${category}"]`);
+  if (btn) btn.classList.add('active');
+  renderIconGallery(category);
+};
+
+function renderIconGallery(category) {
+  const grid = document.getElementById('iconPickerGrid');
+  if (!grid) return;
+  grid.innerHTML = '';
+  
+  const icons = iconGallery[category] || [];
+  icons.forEach(ic => {
+    const btn = document.createElement('div');
+    btn.className = 'icon-picker-item';
+    btn.innerHTML = ic.icon;
+    btn.onclick = () => {
+      document.querySelectorAll('.icon-picker-item').forEach(i => i.classList.remove('selected'));
+      btn.classList.add('selected');
+      selectedIconHTML = ic.icon;
+      const fileDisplay = document.getElementById('fileNameDisplay');
+      if (fileDisplay) fileDisplay.textContent = '';
+    };
+    grid.appendChild(btn);
+  });
+}
+
+window.handleIconFileUpload = async function(event) {
+  const file = event.target.files[0];
+  if (!file) return;
+  const fileNameDisplay = document.getElementById('fileNameDisplay');
+  if (fileNameDisplay) fileNameDisplay.textContent = file.name;
+  
+  document.querySelectorAll('.icon-picker-item').forEach(i => i.classList.remove('selected'));
+  selectedIconHTML = await convertBase64(file);
+};
+
+// النوتس - إصلاح السكرول والطبقة البيضاء
 window.openNotesModal = function(secId, itemId) {
   currentEditingSecId = secId;
   currentEditingItemId = itemId;
@@ -261,21 +406,31 @@ window.openNotesModal = function(secId, itemId) {
   if (notesModal && notesTitle && notesTextarea) {
     notesTitle.textContent = item.name;
     notesTextarea.value = item.notes || '';
+    
+    notesModal.setAttribute('data-sec-id', secId);
+    notesModal.setAttribute('data-item-id', itemId);
+
     notesModal.classList.add('active');
+    document.body.style.overflow = 'hidden'; // قفل السكرول الخارجي
     playSearchSound();
   }
 };
 
 window.saveCurrentNote = function() {
-  if (!currentEditingSecId || !currentEditingItemId) return;
+  const notesModal = document.getElementById('notesModal');
+  const notesTextarea = document.getElementById('notesTextarea');
+  
+  const secId = currentEditingSecId || (notesModal ? notesModal.getAttribute('data-sec-id') : null);
+  const itemId = currentEditingItemId || (notesModal ? notesModal.getAttribute('data-item-id') : null);
 
-  const sec = data.find(s => s.id === currentEditingSecId);
+  if (!secId || !itemId) return;
+
+  const sec = data.find(s => s.id === secId);
   if (!sec) return;
-  const item = sec.items.find(i => i.id === currentEditingItemId);
+  const item = sec.items.find(i => i.id === itemId);
   if (!item) return;
 
-  const notesTextarea = document.getElementById('notesTextarea');
-  item.notes = notesTextarea.value.trim();
+  item.notes = notesTextarea ? notesTextarea.value.trim() : '';
 
   saveData();
   closeNotesModal();
@@ -294,7 +449,10 @@ window.closeNotesModal = function() {
   const notesModal = document.getElementById('notesModal');
   if (notesModal) {
     notesModal.classList.remove('active');
+    notesModal.removeAttribute('data-sec-id');
+    notesModal.removeAttribute('data-item-id');
   }
+  document.body.style.overflow = ''; // إعادة السكرول
   currentEditingSecId = null;
   currentEditingItemId = null;
 };
@@ -318,10 +476,10 @@ window.addPresetSection = function(presetKey) {
   if (!preset) return;
 
   const newSection = {
-    id: 'sec_' + Date.now(),
+    id: 'sec_' + makeId(),
     title: preset.title,
     type: preset.type,
-    items: preset.items.map((item, idx) => ({ ...item, id: `${Date.now()}_${idx}` }))
+    items: preset.items.map((item) => ({ ...item, id: makeId() }))
   };
 
   data.push(newSection);
@@ -332,13 +490,65 @@ window.addPresetSection = function(presetKey) {
 };
 
 window.openQuickLinkModal = function(secId) {
+  isEditMode = false;
+  currentEditingSecId = secId;
+  currentEditingItemId = null;
+  
+  if ($('linkModalTitle')) $('linkModalTitle').innerHTML = '<i class="fa-solid fa-circle-plus"></i> إضافة محتوى للسكشن';
+  if ($('targetSecGroup')) $('targetSecGroup').style.display = 'none'; // إلغاء تحديد السكشن لو الدوسة من جواه
+  
   if (targetSecSelect) {
     targetSecSelect.value = secId;
     updateFormFields();
   }
+  
+  resetLinkModalInputs();
   const linkModal = document.getElementById('linkModal');
   if (linkModal) linkModal.classList.add('active');
 };
+
+window.openEditItemModal = function(secId, itemId) {
+  isEditMode = true;
+  currentEditingSecId = secId;
+  currentEditingItemId = itemId;
+
+  const sec = data.find(s => s.id === secId);
+  if (!sec) return;
+  const item = sec.items.find(i => i.id === itemId);
+  if (!item) return;
+
+  if ($('linkModalTitle')) $('linkModalTitle').innerHTML = '<i class="fa-solid fa-pen-to-square"></i> تعديل المحتوى';
+  if ($('targetSecGroup')) $('targetSecGroup').style.display = 'block';
+  
+  if (targetSecSelect) {
+    targetSecSelect.value = secId;
+    updateFormFields();
+  }
+
+  if (sec.type === 'normal') {
+    if ($('linkName')) $('linkName').value = item.name || '';
+    if ($('linkUrl')) $('linkUrl').value = item.url || '';
+  } else {
+    if ($('topicName')) $('topicName').value = item.name || '';
+    if ($('topicCourse')) $('topicCourse').value = item.course || '';
+    if ($('topicNotes')) $('topicNotes').value = item.notes || '';
+    if ($('topicPdf')) $('topicPdf').value = item.pdf || '';
+  }
+
+  selectedIconHTML = item.icon || '<i class="fa-solid fa-globe"></i>';
+
+  const linkModal = document.getElementById('linkModal');
+  if (linkModal) linkModal.classList.add('active');
+};
+
+function resetLinkModalInputs() {
+  ['linkName', 'linkUrl', 'topicName', 'topicCourse', 'topicNotes', 'topicPdf', 'iconFile'].forEach(id => {
+    if ($(id)) $(id).value = '';
+  });
+  const fileNameDisplay = document.getElementById('fileNameDisplay');
+  if (fileNameDisplay) fileNameDisplay.textContent = '';
+  selectedIconHTML = '<i class="fa-solid fa-globe"></i>';
+}
 
 function playSuccessSound() {
   try {
@@ -357,7 +567,7 @@ function playSuccessSound() {
     gain.connect(ctx.destination);
     osc.start(now);
     osc.stop(now + 0.35);
-  } catch (e) { console.log(e); }
+  } catch (e) {}
 }
 
 function playSearchSound() {
@@ -377,7 +587,7 @@ function playSearchSound() {
     gain.connect(ctx.destination);
     osc.start(now);
     osc.stop(now + 0.12);
-  } catch (e) { console.log(e); }
+  } catch (e) {}
 }
 
 function showSuccessToast(msg = 'تمت العملية بنجاح!') {
@@ -436,6 +646,10 @@ if (openSecBtn) openSecBtn.onclick = () => secModal.classList.add('active');
 const openLinkBtn = document.getElementById('openLinkModal');
 if (openLinkBtn) {
   openLinkBtn.onclick = () => {
+    isEditMode = false;
+    document.getElementById('linkModalTitle').innerHTML = '<i class="fa-solid fa-circle-plus"></i> إضافة محتوى للسكشن';
+    document.getElementById('targetSecGroup').style.display = 'block';
+    resetLinkModalInputs();
     updateFormFields();
     linkModal.classList.add('active');
   };
@@ -457,7 +671,6 @@ window.addEventListener('click', (e) => {
   }
 });
 
-// إغلاق النوافذ باستخدام مفتاح Escape
 window.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') {
     if (secModal) secModal.classList.remove('active');
@@ -495,8 +708,12 @@ if (saveSectionBtn) {
     const title = titleInput ? titleInput.value.trim() : '';
     const type = typeSelect ? typeSelect.value : 'normal';
 
-    if (!title) return;
-    data.push({ id: 'sec_' + Date.now(), title, type, items: [] });
+    if (!title) {
+      alert('يرجى كتابة عنوان السكشن أولاً!');
+      return;
+    }
+    
+    data.push({ id: 'sec_' + makeId(), title, type, items: [] });
     if (titleInput) titleInput.value = '';
     if (secModal) secModal.classList.remove('active');
     saveData();
@@ -504,6 +721,7 @@ if (saveSectionBtn) {
   };
 }
 
+// حفظ المحتوى مع Validation والتحقق من التعديل/الإضافة
 const saveLinkBtn = document.getElementById('saveLinkBtn');
 if (saveLinkBtn) {
   saveLinkBtn.onclick = async () => {
@@ -511,12 +729,7 @@ if (saveLinkBtn) {
     const sec = data.find(s => s.id === secId);
     if (!sec) return;
 
-    const fileInput = document.getElementById('iconFile');
-    let icon = '<i class="fa-solid fa-globe"></i>';
-
-    if (fileInput && fileInput.files && fileInput.files[0]) {
-      icon = await convertBase64(fileInput.files[0]);
-    }
+    let icon = selectedIconHTML;
 
     if (sec.type === 'normal') {
       const nameInput = document.getElementById('linkName');
@@ -524,11 +737,27 @@ if (saveLinkBtn) {
       const name = nameInput ? nameInput.value.trim() : '';
       const url = urlInput ? urlInput.value.trim() : '';
 
-      if (!name || !url) return;
-      sec.items.push({ id: '' + Date.now(), name, url, icon });
+      if (!name || !url) {
+        alert('يرجى إدخال اسم الموقع ورابط الموقع!');
+        return;
+      }
 
-      if (nameInput) nameInput.value = '';
-      if (urlInput) urlInput.value = '';
+      if (!isSafeUrl(url)) {
+        alert('رابط الموقع غير صالح، لازم يبدأ بـ http:// أو https://');
+        return;
+      }
+
+      if (isEditMode && currentEditingItemId) {
+        const item = sec.items.find(i => i.id === currentEditingItemId);
+        if (item) {
+          item.name = name;
+          item.url = url;
+          item.icon = icon;
+        }
+      } else {
+        sec.items.push({ id: makeId(), name, url, icon });
+      }
+
     } else {
       const nameInput = document.getElementById('topicName');
       const courseInput = document.getElementById('topicCourse');
@@ -540,20 +769,52 @@ if (saveLinkBtn) {
       const notes = notesInput ? notesInput.value.trim() : '';
       const pdf = pdfInput ? pdfInput.value.trim() : '';
 
-      if (!name) return;
-      sec.items.push({ id: '' + Date.now(), name, course, notes, pdf, icon });
+      if (!name) {
+        alert('يرجى إدخال اسم التقنية أو الموضوع!');
+        return;
+      }
 
-      if (nameInput) nameInput.value = '';
-      if (courseInput) courseInput.value = '';
-      if (notesInput) notesInput.value = '';
-      if (pdfInput) pdfInput.value = '';
+      if (!isSafeUrl(course) || !isSafeUrl(pdf)) {
+        alert('رابط الكورس أو المرجع غير صالح، لازم يبدأ بـ http:// أو https://');
+        return;
+      }
+
+      if (isEditMode && currentEditingItemId) {
+        const item = sec.items.find(i => i.id === currentEditingItemId);
+        if (item) {
+          item.name = name;
+          item.course = course;
+          item.notes = notes;
+          item.pdf = pdf;
+          item.icon = icon;
+        }
+      } else {
+        sec.items.push({ id: makeId(), name, course, notes, pdf, icon });
+      }
     }
 
-    if (fileInput) fileInput.value = '';
     if (linkModal) linkModal.classList.remove('active');
     saveData();
-    showSuccessToast('تمت إضافة العنصر بنجاح!');
+    showSuccessToast(isEditMode ? 'تم تعديل المحتوى بنجاح!' : 'تمت إضافة العنصر بنجاح!');
   };
+}
+
+function $(id) {
+  return document.getElementById(id);
+}
+
+function makeId() {
+  return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
+}
+
+function isSafeUrl(url) {
+  if (!url) return true; // empty/optional fields are fine
+  try {
+    const parsed = new URL(url);
+    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
+  } catch (e) {
+    return false;
+  }
 }
 
 const convertBase64 = (file) => {
