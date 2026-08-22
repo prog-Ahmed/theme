@@ -73,18 +73,21 @@
       <button class="nav-item" id="themeBtn" title="المظهر" aria-label="تبديل المظهر الداكن والفاتح">
         <i class="fa-solid fa-moon"></i>
       </button>
+      <button class="nav-item" id="openSettingsModal" title="نسخة احتياطية" aria-label="نسخة احتياطية للبيانات">
+        <i class="fa-solid fa-gear"></i>
+      </button>
     </nav>
   </div>
 
   <!-- Modal إضافة سكشن -->
   <div class="modal-overlay" id="sectionModal">
     <div class="modal glass-card">
-      <h3><i class="fa-solid fa-folder-plus"></i> إضافة سكشن جديد</h3>
+      <h3 id="sectionModalTitle"><i class="fa-solid fa-folder-plus"></i> إضافة سكشن جديد</h3>
       <div class="form-group">
         <label>عنوان السكشن</label>
         <input type="text" id="secTitle" placeholder="مثال: مسار Front-End أو أدوات التصميم">
       </div>
-      <div class="form-group">
+      <div class="form-group" id="secTypeGroup">
         <label>نوع السكشن</label>
         <div class="custom-shopify-select">
           <select id="secType">
@@ -97,7 +100,7 @@
         <button class="btn btn-primary" id="saveSectionBtn">حفظ السكشن</button>
         <button class="btn btn-secondary closeModal">إلغاء</button>
       </div>
-      <div class="preset-buttons">
+      <div class="preset-buttons" id="sectionPresets">
         <p style="margin-bottom: 8px; font-size: 0.9rem; color: #aaa;">أو أضف قسم جاهز بنقرة واحدة:</p>
         <button type="button" class="btn-preset" onclick="addPresetSection('ai')">🤖 أدوات الذكاء الاصطناعي</button>
         <button type="button" class="btn-preset" onclick="addPresetSection('freelance')">💼 Freelance</button>
@@ -106,6 +109,7 @@
       </div>
     </div>
   </div>
+
 
   <!-- Modal إضافة / تعديل محتوى -->
   <div class="modal-overlay" id="linkModal">
@@ -175,6 +179,26 @@
       <div class="modal-actions">
         <button class="btn btn-primary" id="saveLinkBtn">حفظ المحتوى</button>
         <button class="btn btn-secondary closeModal">إلغاء</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal النسخة الاحتياطية -->
+  <div class="modal-overlay" id="settingsModal">
+    <div class="modal glass-card modal-sm">
+      <h3><i class="fa-solid fa-gear"></i> النسخة الاحتياطية</h3>
+      <p class="settings-hint">احتفظ بنسخة من بياناتك عشان تقدر تنقلها لجهاز تاني أو ترجعها لو حصل أي حاجة.</p>
+      <div class="modal-actions modal-actions-stacked">
+        <button class="btn btn-primary" id="exportDataBtn">
+          <i class="fa-solid fa-cloud-arrow-down"></i> تحميل نسخة احتياطية
+        </button>
+        <label for="importDataFile" class="btn btn-secondary btn-file-label">
+          <i class="fa-solid fa-cloud-arrow-up"></i> استيراد نسخة محفوظة
+        </label>
+        <input type="file" id="importDataFile" accept="application/json">
+      </div>
+      <div class="modal-actions">
+        <button class="btn btn-secondary closeModal">إغلاق</button>
       </div>
     </div>
   </div>
