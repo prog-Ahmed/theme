@@ -29,6 +29,11 @@
   margin: 0;
   padding: 0;
   font-family: 'Cairo', sans-serif;
+}
+
+/* الانتقالات مقصورة على العناصر اللي فعلاً بتتغير حالتها، مش كل عنصر في الصفحة */
+button, a, input, select, textarea, .glass-card, .card, .nav-item,
+.icon-tab, .icon-picker-item, .btn, .draggable-card {
   transition: background-color 0.3s ease, color 0.3s ease, border-color 0.3s ease, box-shadow 0.3s ease;
 }
 
@@ -648,23 +653,31 @@ textarea:focus-visible,
 @media (max-width: 640px) {
   body { padding-bottom: 170px; } /* مساحة كافية تحت عشان الأدوات العائمة متبقاش فوق المحتوى */
 
+  /* تخفيف الـ blur على الموبايل - أكبر سبب للهنج، الـ GPU بتاع الموبايل أضعف بكتير من الديسكتوب */
+  .glass-card, .card, .neon-search-box, .modal, .bottom-nav,
+  .bottom-time-widget, .bottom-profile-avatar, .success-toast-card,
+  .notes-modal-card, .modal-overlay, .notes-modal-overlay {
+    backdrop-filter: blur(10px) !important;
+    -webkit-backdrop-filter: blur(10px) !important;
+  }
+  .glow-blob { filter: blur(60px); opacity: 0.25; }
+
   .dashboard-grid, .sub-grid { grid-template-columns: 1fr; gap: 1rem; }
 
   .expand-search-wrapper { width: 92%; top: 16px; }
 
   /* الودجت العائمة بتترص فوق بعض في السطر السفلي بدل ما تتزاحم يمين وشمال */
   .bottom-time-widget {
-    left: 16%;
-    top: 10px;
+    left: 50%;
+    bottom: 96px;
     transform: translateX(-50%);
     height: 44px;
     padding: 0 14px;
   }
-
   .time-display { font-size: 0.95rem; }
   .date-display { display: none; } /* التاريخ مش ضروري على الموبايل، بياخد مساحة */
 
-  .bottom-profile-avatar { width: 46px; height: 46px;top: 10px; right: 14px; }
+  .bottom-profile-avatar { width: 46px; height: 46px; bottom: 96px; right: 14px; }
 
   .bottom-nav-container { bottom: 16px; }
   .bottom-nav { gap: 6px; padding: 4px 8px; }
