@@ -316,8 +316,11 @@ function render(filterQuery = '') {
 
     card.innerHTML = `
       <div class="card-header">
-        <h2><i class="fa-solid fa-grip-vertical drag-handle"></i> ${sec.title}</h2>
-        <button class="btn-delete-sec" onclick="promptDelete('section', '${sec.id}')"><i class="fa-solid fa-trash-can"></i></button>
+        <h2><i class="fa-solid fa-grip-vertical drag-handle"></i> <span class="card-title-text">${sec.title}</span></h2>
+        <div class="card-header-actions">
+          <button class="btn-edit-sec" onclick="event.stopPropagation(); renameSection('${sec.id}')" title="تعديل العنوان" aria-label="تعديل عنوان السكشن"><i class="fa-solid fa-pen"></i></button>
+          <button class="btn-delete-sec" onclick="event.stopPropagation(); promptDelete('section', '${sec.id}')" title="حذف السكشن" aria-label="حذف السكشن"><i class="fa-solid fa-trash-can"></i></button>
+        </div>
       </div>
       ${contentHTML}
     `;
@@ -639,9 +642,62 @@ if (themeBtn) {
 const secModal = document.getElementById('sectionModal');
 const linkModal = document.getElementById('linkModal');
 const confirmModal = document.getElementById('confirmModal');
+const settingsModal = document.getElementById('settingsModal');
+
+let isEditingSection = false;
+let currentEditingSectionId = null;
+
+window.renameSection = function(secId) {
+  const sec = data.find(s => s.id === secId);
+  if (!sec) return;
+
+  isEditingSection = true;
+  currentEditingSectionId = secId;
+
+  const titleInput = document.getElementById('secTitle');
+  const modalTitle = document.getElementById('sectionModalTitle');
+  const typeGroup = document.getElementById('secTypeGroup');
+  const presets = document.getElementById('sectionPresets');
+  const saveBtn = document.getElementById('saveSectionBtn');
+
+  if (titleInput) titleInput.value = sec.title;
+  if (modalTitle) modalTitle.innerHTML = '<i class="fa-solid fa-pen-to-square"></i> تعديل عنوان السكشن';
+  if (typeGroup) typeGroup.classList.add('hidden'); // النوع بيتحدد وقت الإنشاء بس، مش بيتغير هنا
+  if (presets) presets.classList.add('hidden');
+  if (saveBtn) saveBtn.textContent = 'حفظ التعديل';
+
+  if (secModal) secModal.classList.add('active');
+  if (titleInput) titleInput.focus();
+};
+
+function resetSectionModalToAddMode() {
+  isEditingSection = false;
+  currentEditingSectionId = null;
+  const modalTitle = document.getElementById('sectionModalTitle');
+  const typeGroup = document.getElementById('secTypeGroup');
+  const presets = document.getElementById('sectionPresets');
+  const saveBtn = document.getElementById('saveSectionBtn');
+  const titleInput = document.getElementById('secTitle');
+
+  if (modalTitle) modalTitle.innerHTML = '<i class="fa-solid fa-folder-plus"></i> إضافة سكشن جديد';
+  if (typeGroup) typeGroup.classList.remove('hidden');
+  if (presets) presets.classList.remove('hidden');
+  if (saveBtn) saveBtn.textContent = 'حفظ السكشن';
+  if (titleInput) titleInput.value = '';
+}
 
 const openSecBtn = document.getElementById('openSectionModal');
-if (openSecBtn) openSecBtn.onclick = () => secModal.classList.add('active');
+if (openSecBtn) {
+  openSecBtn.onclick = () => {
+    resetSectionModalToAddMode();
+    secModal.classList.add('active');
+  };
+}
+
+const openSettingsBtn = document.getElementById('openSettingsModal');
+if (openSettingsBtn && settingsModal) {
+  openSettingsBtn.onclick = () => settingsModal.classList.add('active');
+}
 
 const openLinkBtn = document.getElementById('openLinkModal');
 if (openLinkBtn) {
@@ -660,6 +716,8 @@ document.querySelectorAll('.closeModal').forEach(btn => {
     if (secModal) secModal.classList.remove('active');
     if (linkModal) linkModal.classList.remove('active');
     if (confirmModal) confirmModal.classList.remove('active');
+    if (settingsModal) settingsModal.classList.remove('active');
+    resetSectionModalToAddMode();
     closeNotesModal();
   };
 });
@@ -712,12 +770,19 @@ if (saveSectionBtn) {
       alert('يرجى كتابة عنوان السكشن أولاً!');
       return;
     }
-    
-    data.push({ id: 'sec_' + makeId(), title, type, items: [] });
-    if (titleInput) titleInput.value = '';
+
+    if (isEditingSection && currentEditingSectionId) {
+      const sec = data.find(s => s.id === currentEditingSectionId);
+      if (sec) sec.title = title;
+      showSuccessToast('تم تعديل عنوان السكشن بنجاح!');
+    } else {
+      data.push({ id: 'sec_' + makeId(), title, type, items: [] });
+      showSuccessToast('تم إضافة السكشن بنجاح!');
+    }
+
+    resetSectionModalToAddMode();
     if (secModal) secModal.classList.remove('active');
     saveData();
-    showSuccessToast('تم إضافة السكشن بنجاح!');
   };
 }
 
@@ -735,15 +800,16 @@ if (saveLinkBtn) {
       const nameInput = document.getElementById('linkName');
       const urlInput = document.getElementById('linkUrl');
       const name = nameInput ? nameInput.value.trim() : '';
-      const url = urlInput ? urlInput.value.trim() : '';
+      const rawUrl = urlInput ? urlInput.value.trim() : '';
 
-      if (!name || !url) {
+      if (!name || !rawUrl) {
         alert('يرجى إدخال اسم الموقع ورابط الموقع!');
         return;
       }
 
-      if (!isSafeUrl(url)) {
-        alert('رابط الموقع غير صالح، لازم يبدأ بـ http:// أو https://');
+      const url = sanitizeUrl(rawUrl);
+      if (url === null) {
+        alert('الرابط ده مش مسموح بيه لأسباب أمان.');
         return;
       }
 
@@ -765,17 +831,19 @@ if (saveLinkBtn) {
       const pdfInput = document.getElementById('topicPdf');
 
       const name = nameInput ? nameInput.value.trim() : '';
-      const course = courseInput ? courseInput.value.trim() : '';
       const notes = notesInput ? notesInput.value.trim() : '';
-      const pdf = pdfInput ? pdfInput.value.trim() : '';
+      const rawCourse = courseInput ? courseInput.value.trim() : '';
+      const rawPdf = pdfInput ? pdfInput.value.trim() : '';
 
       if (!name) {
         alert('يرجى إدخال اسم التقنية أو الموضوع!');
         return;
       }
 
-      if (!isSafeUrl(course) || !isSafeUrl(pdf)) {
-        alert('رابط الكورس أو المرجع غير صالح، لازم يبدأ بـ http:// أو https://');
+      const course = sanitizeUrl(rawCourse);
+      const pdf = sanitizeUrl(rawPdf);
+      if (course === null || pdf === null) {
+        alert('رابط الكورس أو المرجع مش مسموح بيه لأسباب أمان.');
         return;
       }
 
@@ -807,14 +875,22 @@ function makeId() {
   return (window.crypto && crypto.randomUUID) ? crypto.randomUUID() : `${Date.now()}_${Math.random().toString(36).slice(2, 8)}`;
 }
 
-function isSafeUrl(url) {
-  if (!url) return true; // empty/optional fields are fine
-  try {
-    const parsed = new URL(url);
-    return parsed.protocol === 'http:' || parsed.protocol === 'https:';
-  } catch (e) {
-    return false;
+function sanitizeUrl(url) {
+  if (!url) return '';
+  const trimmed = url.trim();
+
+  // امنع بروتوكولات خطيرة فعليًا (زي javascript:) بس اقبل أي حاجة تانية زي ما هي
+  if (/^\s*(javascript|data|vbscript|file)\s*:/i.test(trimmed)) {
+    return null; // مرفوض
   }
+
+  // لو فيه بروتوكول واضح (http, https, mailto, tel, whatsapp...) سيبه زي ما هو
+  if (/^[a-zA-Z][a-zA-Z0-9+.-]*:/.test(trimmed)) {
+    return trimmed;
+  }
+
+  // مفيش بروتوكول (مثلاً "wa.me/xxx" أو "google.com") - ضيف https:// تلقائي عشان اللينك يشتغل
+  return `https://${trimmed}`;
 }
 
 const convertBase64 = (file) => {
@@ -871,4 +947,77 @@ function updateClockWidget() {
 
 setInterval(updateClockWidget, 1000);
 updateClockWidget();
+
+// ===== نسخة احتياطية: تصدير واستيراد البيانات =====
+function exportBackup() {
+  const backup = {
+    app: 'futuristic-glass-dashboard',
+    version: 1,
+    exportedAt: new Date().toISOString(),
+    data: data,
+    theme: theme,
+    avatar: localStorage.getItem('futuristic_dash_avatar') || null
+  };
+  const blob = new Blob([JSON.stringify(backup, null, 2)], { type: 'application/json' });
+  const url = URL.createObjectURL(blob);
+  const a = document.createElement('a');
+  a.href = url;
+  a.download = `dashboard-backup-${new Date().toISOString().slice(0, 10)}.json`;
+  document.body.appendChild(a);
+  a.click();
+  a.remove();
+  URL.revokeObjectURL(url);
+}
+
+function importBackup(file) {
+  if (!file) return;
+  const reader = new FileReader();
+  reader.onload = (e) => {
+    let parsed;
+    try {
+      parsed = JSON.parse(e.target.result);
+    } catch (err) {
+      alert('الملف ده مش نسخة احتياطية صالحة (JSON غير صحيح).');
+      return;
+    }
+
+    const incomingData = Array.isArray(parsed) ? parsed : parsed.data;
+    if (!Array.isArray(incomingData)) {
+      alert('الملف ده مش نسخة احتياطية صالحة لهذا التطبيق.');
+      return;
+    }
+
+    if (!confirm('استيراد النسخة دي هيستبدل كل بياناتك الحالية. تحب تكمل؟')) return;
+
+    data = incomingData;
+    saveData();
+
+    if (parsed.theme === 'dark' || parsed.theme === 'light') {
+      theme = parsed.theme;
+      document.documentElement.setAttribute('data-theme', theme);
+      localStorage.setItem('futuristic_dash_theme', theme);
+    }
+
+    if (parsed.avatar) {
+      localStorage.setItem('futuristic_dash_avatar', parsed.avatar);
+      const profileImg = document.getElementById('profileImg');
+      if (profileImg) profileImg.src = parsed.avatar;
+    }
+
+    showSuccessToast('تم استيراد النسخة الاحتياطية بنجاح!');
+  };
+  reader.onerror = () => alert('تعذّرت قراءة الملف، حاول تاني.');
+  reader.readAsText(file);
+}
+
+const exportDataBtn = document.getElementById('exportDataBtn');
+if (exportDataBtn) exportDataBtn.onclick = exportBackup;
+
+const importDataFile = document.getElementById('importDataFile');
+if (importDataFile) {
+  importDataFile.onchange = (e) => {
+    importBackup(e.target.files[0]);
+    e.target.value = ''; // يسمح باختيار نفس الملف تاني لو حصل خطأ
+  };
+}
 render();
