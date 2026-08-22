@@ -653,14 +653,42 @@ textarea:focus-visible,
 @media (max-width: 640px) {
   body { padding-bottom: 170px; } /* مساحة كافية تحت عشان الأدوات العائمة متبقاش فوق المحتوى */
 
-  /* تخفيف الـ blur على الموبايل - أكبر سبب للهنج، الـ GPU بتاع الموبايل أضعف بكتير من الديسكتوب */
+  /* شيل الـ blur خالص على الموبايل - أتقل حاجة على الـ GPU حتى بقيمة صغيرة.
+     بنعوضه بخلفية أغمق/أوضح شوية عشان الوضوح يفضل كويس من غيره */
   .glass-card, .card, .neon-search-box, .modal, .bottom-nav,
   .bottom-time-widget, .bottom-profile-avatar, .success-toast-card,
   .notes-modal-card, .modal-overlay, .notes-modal-overlay {
-    backdrop-filter: blur(10px) !important;
-    -webkit-backdrop-filter: blur(10px) !important;
+    backdrop-filter: none !important;
+    -webkit-backdrop-filter: none !important;
   }
-  .glow-blob { filter: blur(60px); opacity: 0.25; }
+  [data-theme="dark"] .glass-card,
+  [data-theme="dark"] .card,
+  [data-theme="dark"] .neon-search-box,
+  [data-theme="dark"] .modal,
+  [data-theme="dark"] .bottom-nav,
+  [data-theme="dark"] .bottom-time-widget,
+  [data-theme="dark"] .success-toast-card,
+  [data-theme="dark"] .notes-modal-card {
+    background: rgba(18, 18, 32, 0.92);
+  }
+  [data-theme="light"] .glass-card,
+  [data-theme="light"] .card,
+  [data-theme="light"] .neon-search-box,
+  [data-theme="light"] .modal,
+  [data-theme="light"] .bottom-nav,
+  [data-theme="light"] .bottom-time-widget,
+  [data-theme="light"] .success-toast-card,
+  [data-theme="light"] .notes-modal-card {
+    background: rgba(255, 255, 255, 0.94);
+  }
+
+  /* الـ blobs بتاعة الإضاءة بتتحسب باستمرار وهي fixed - أوقفها خالص على الموبايل */
+  .glow-blob { display: none; }
+
+  .glass-card, .card, .neon-search-box, .modal, .bottom-nav,
+  .bottom-time-widget, .success-toast-card, .notes-modal-card {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.35) !important;
+  }
 
   .dashboard-grid, .sub-grid { grid-template-columns: 1fr; gap: 1rem; }
 
@@ -677,11 +705,11 @@ textarea:focus-visible,
   .time-display { font-size: 0.95rem; }
   .date-display { display: none; } /* التاريخ مش ضروري على الموبايل، بياخد مساحة */
 
-  .bottom-profile-avatar { width: 46px; height: 46px; top: 10px ; right: 14px; }
+  .bottom-profile-avatar { width: 46px; height: 46px; top: 10px; right: 14px; }
 
   .bottom-nav-container { bottom: 16px; }
   .bottom-nav { gap: 6px; padding: 4px 8px; }
-  .nav-item { width: 40px; top : 10px; font-size: 1.05rem; }
+  .nav-item { width: 40px; height: 40px; font-size: 1.05rem; }
 
   .modal { padding: 16px; border-radius: 18px; }
   .modal-actions { flex-direction: column-reverse; }
