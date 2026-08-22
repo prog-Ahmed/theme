@@ -668,7 +668,7 @@ textarea:focus-visible,
 
   /* الودجت العائمة بتترص فوق بعض في السطر السفلي بدل ما تتزاحم يمين وشمال */
   .bottom-time-widget {
-    left: 10%;
+    left: 13%;
     top: 10px;
     transform: translateX(-50%);
     height: 44px;
@@ -677,7 +677,7 @@ textarea:focus-visible,
   .time-display { font-size: 0.95rem; }
   .date-display { display: none; } /* التاريخ مش ضروري على الموبايل، بياخد مساحة */
 
-  .bottom-profile-avatar { width: 46px; height: 46px; bottom: 96px; right: 14px; }
+  .bottom-profile-avatar { width: 46px; height: 46px; top: 10px ; right: 14px; }
 
   .bottom-nav-container { bottom: 16px; }
   .bottom-nav { gap: 6px; padding: 4px 8px; }
