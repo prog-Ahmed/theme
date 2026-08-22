@@ -668,8 +668,8 @@ textarea:focus-visible,
 
   /* الودجت العائمة بتترص فوق بعض في السطر السفلي بدل ما تتزاحم يمين وشمال */
   .bottom-time-widget {
-    left: 50%;
-    bottom: 96px;
+    left: 10%;
+    top: 10px;
     transform: translateX(-50%);
     height: 44px;
     padding: 0 14px;
@@ -681,7 +681,7 @@ textarea:focus-visible,
 
   .bottom-nav-container { bottom: 16px; }
   .bottom-nav { gap: 6px; padding: 4px 8px; }
-  .nav-item { width: 40px; height: 40px; font-size: 1.05rem; }
+  .nav-item { width: 40px; top : 10px; font-size: 1.05rem; }
 
   .modal { padding: 16px; border-radius: 18px; }
   .modal-actions { flex-direction: column-reverse; }
