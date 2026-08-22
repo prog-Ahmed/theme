@@ -607,8 +607,12 @@ const topHeader = document.querySelector('.top-header');
 const searchInput = document.getElementById('searchInput');
 const searchToggleBtn = document.getElementById('searchToggleBtn');
 
+let searchDebounceTimer = null;
 window.filterDashboard = function() {
-  if (searchInput) render(searchInput.value);
+  clearTimeout(searchDebounceTimer);
+  searchDebounceTimer = setTimeout(() => {
+    if (searchInput) render(searchInput.value);
+  }, 180);
 };
 
 window.toggleSearch = function(show) {
