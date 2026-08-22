@@ -696,7 +696,7 @@ textarea:focus-visible,
 
   /* الودجت العائمة بتترص فوق بعض في السطر السفلي بدل ما تتزاحم يمين وشمال */
   .bottom-time-widget {
-    left: 13%;
+    left: 16%;
     top: 10px;
     transform: translateX(-50%);
     height: 44px;
